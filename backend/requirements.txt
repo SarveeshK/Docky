@@ -4,3 +4,4 @@ flask_cors
 flask_jwt_extended
 werkzeug
 python-dotenv
+gunicorn

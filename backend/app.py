@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import os
+from utils.seed import seed
 
 
 app = Flask(__name__)
@@ -32,6 +33,8 @@ app.register_blueprint(settings_bp, url_prefix='/api/settings')
 # Create tables if not exist
 with app.app_context():
     db.create_all()
+
+seed()
 
 if __name__ == '__main__':
     app.run(debug=True)

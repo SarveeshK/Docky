@@ -12,14 +12,4 @@ services:
       - key: JWT_SECRET_KEY
         sync: false  # Set this in Render dashboard for security
     plan: free
-    rootDir: backend
-
-  - type: static_site
-    name: docky-frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: build
-    rootDir: frontend
-    envVars:
-      - key: REACT_APP_API_URL
-        sync: false  # Set this to your backend Render URL after first deploy
-    plan: free 
+    rootDir: backend 

@@ -14,7 +14,7 @@ services:
     plan: free
     rootDir: backend
 
-  - type: static
+  - type: static_site
     name: docky-frontend
     buildCommand: npm install && npm run build
     staticPublishPath: build

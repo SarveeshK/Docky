@@ -14,10 +14,14 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post('/api/auth/login', { email, password, user_type: userType });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user_type', res.data.user_type);
-      localStorage.setItem('name', res.data.name);
-      window.location.href = res.data.user_type === 'admin' ? '/admin' : '/user';
+      if (res.data && res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user_type', res.data.user_type);
+        localStorage.setItem('name', res.data.name);
+        window.location.href = res.data.user_type === 'admin' ? '/admin' : '/user';
+      } else {
+        toast.error('Login failed: No token received');
+      }
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     }

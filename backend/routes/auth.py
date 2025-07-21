@@ -27,16 +27,37 @@ def signup():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    user_type = data.get('user_type', 'user')
-    # Only allow admin login for a specific email
-    if user_type == 'admin':
-        if email != 'admin@docky.com':
-            return jsonify({'error': 'Unauthorized admin login'}), 403
-    user = User.query.filter_by(email=email, user_type=user_type).first()
-    if not user or not check_password_hash(user.hashed_password, password):
-        return jsonify({'error': 'Invalid credentials'}), 401
-    token = create_access_token(identity={'id': user.id, 'user_type': user.user_type})
-    return jsonify({'token': token, 'user_type': user.user_type, 'name': user.name}), 200
+    print("--- Login attempt received ---")
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+        user_type = data.get('user_type', 'user')
+        print(f"Attempting login for email: {email}, user_type: {user_type}")
+
+        if user_type == 'admin':
+            if email != 'admin@docky.com':
+                print("Admin login attempt for non-admin email. Denying.")
+                return jsonify({'error': 'Unauthorized admin login'}), 403
+        
+        user = User.query.filter_by(email=email, user_type=user_type).first()
+        
+        if not user:
+            print(f"User '{email}' not found in database. Denying.")
+            return jsonify({'error': 'Invalid credentials - user not found'}), 401
+
+        print(f"User '{email}' found. Checking password.")
+        if not check_password_hash(user.hashed_password, password):
+            print(f"Password for user '{email}' does not match. Denying.")
+            return jsonify({'error': 'Invalid credentials - password mismatch'}), 401
+        
+        print(f"Login successful for user '{email}'. Generating token.")
+        token = create_access_token(identity={'id': user.id, 'user_type': user.user_type})
+        response_data = {'token': token, 'user_type': user.user_type, 'name': user.name}
+        print(f"Returning token for user '{email}'.")
+        return jsonify(response_data), 200
+    except Exception as e:
+        print(f"!!! An unexpected error occurred in login function: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': 'A server error occurred'}), 500

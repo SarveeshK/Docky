@@ -62,7 +62,8 @@ def my_documents():
 def download_document(doc_id):
     user = get_jwt_identity()
     doc = Document.query.get_or_404(doc_id)
-    if doc.user_id != user['id']:
+    # Allow admin to download any file, user only their own
+    if user['user_type'] != 'admin' and doc.user_id != user['id']:
         return jsonify({'error': 'Unauthorized'}), 403
     return send_from_directory(app.config['UPLOAD_FOLDER'], doc.filename, as_attachment=True)
 

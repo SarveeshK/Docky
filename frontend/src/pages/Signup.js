@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +19,7 @@ export default function Signup() {
       await axios.post('/api/auth/signup', { name, email, password, user_type: userType });
       toast.success('Signup successful! You can login now.');
       setError('');
+      setTimeout(() => navigate('/'), 1500); // Redirect to login after 1.5s
     } catch (err) {
       toast.error(err.response?.data?.error || 'Signup failed');
       setSuccess('');

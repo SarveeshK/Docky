@@ -39,6 +39,12 @@ export default function Login() {
   return (
     <Layout>
       <div className="flex items-center justify-center min-h-[60vh]">
+        {/* --- DEBUG: SHOW API URL --- */}
+        <div style={{ position: 'absolute', top: '80px', backgroundColor: 'yellow', padding: '10px', border: '1px solid black', zIndex: 1000 }}>
+            <strong>API URL Used:</strong> {process.env.REACT_APP_API_URL || "NOT SET"}
+        </div>
+        {/* --- END DEBUG --- */}
+
         <form className="bg-white p-10 rounded-2xl shadow-xl w-96 flex flex-col gap-4 border border-blue-100" onSubmit={handleLogin}>
           <h2 className="text-3xl font-extrabold mb-4 text-blue-700 text-center tracking-tight">Sign in to Docky</h2>
           {/* Toggle Button Group */}

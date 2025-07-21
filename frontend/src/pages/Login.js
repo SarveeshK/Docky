@@ -15,10 +15,10 @@ export default function Login() {
     try {
       const res = await axios.post('/api/auth/login', { email, password, user_type: userType });
       if (res.data && res.data.token) {
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user_type', res.data.user_type);
-        localStorage.setItem('name', res.data.name);
-        window.location.href = res.data.user_type === 'admin' ? '/admin' : '/user';
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user_type', res.data.user_type);
+      localStorage.setItem('name', res.data.name);
+      window.location.href = res.data.user_type === 'admin' ? '/admin' : '/user';
       } else {
         toast.error('Login failed: No token received');
       }

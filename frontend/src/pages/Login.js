@@ -14,16 +14,25 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post('/api/auth/login', { email, password, user_type: userType });
-      if (res.data && res.data.token) {
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user_type', res.data.user_type);
-      localStorage.setItem('name', res.data.name);
-      window.location.href = res.data.user_type === 'admin' ? '/admin' : '/user';
+
+      // Check if the response and data exist, and if a token is present
+      if (res && res.data && res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user_type', res.data.user_type);
+        localStorage.setItem('name', res.data.name);
+        window.location.href = res.data.user_type === 'admin' ? '/admin' : '/user';
       } else {
-        toast.error('Login failed: No token received');
+        // If there's no token, show a detailed error
+        const detailedError = `Login failed. Backend sent a successful response, but it did not contain a token. Response data: ${JSON.stringify(res.data)}`;
+        toast.error('Login Failed: No Token');
+        alert(detailedError); // Use a prominent alert for debugging
       }
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Login failed');
+      // This block runs if the backend returns an error status (like 401, 404, 500)
+      const errorResponse = err.response ? JSON.stringify(err.response.data) : 'No response from server.';
+      const detailedError = `An error occurred. Status: ${err.response?.status}. Response: ${errorResponse}`;
+      toast.error('An error occurred');
+      alert(detailedError); // Use a prominent alert for debugging
     }
   };
 

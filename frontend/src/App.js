@@ -7,6 +7,10 @@ import AdminDashboard from './pages/AdminDashboard';
 import SetDeadline from './pages/SetDeadline';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
+// Set the base URL for all axios requests
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 function App() {
   return (

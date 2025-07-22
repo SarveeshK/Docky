@@ -4,7 +4,8 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import os
 
-app = Flask(__name__)
+from flask import send_from_directory
+app = Flask(__name__, static_folder="../frontend/build", static_url_path="/")
 database_url = os.environ.get('DATABASE_URL')
 
 if database_url:
@@ -35,6 +36,32 @@ app.register_blueprint(settings_bp, url_prefix='/api/settings')
 # Create tables if not exist
 with app.app_context():
     db.create_all()
+
+
+
+# Serve favicon.ico from React build or public directory
+@app.route('/favicon.ico')
+def favicon():
+    # Try build directory first, fallback to public if needed
+    build_favicon = os.path.join(app.static_folder, 'favicon.ico')
+    public_favicon = os.path.join(os.path.dirname(app.static_folder), 'public', 'favicon.ico')
+    if os.path.exists(build_favicon):
+        return send_from_directory(app.static_folder, 'favicon.ico')
+    elif os.path.exists(public_favicon):
+        return send_from_directory(os.path.join(os.path.dirname(app.static_folder), 'public'), 'favicon.ico')
+    else:
+        # No favicon found
+        from flask import abort
+        return abort(404)
+
+# Serve React build files for non-API routes
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

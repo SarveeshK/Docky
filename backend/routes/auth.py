@@ -39,9 +39,9 @@ def login():
             if email != 'admin@docky.com':
                 print("Admin login attempt for non-admin email. Denying.")
                 return jsonify({'error': 'Unauthorized admin login'}), 403
-        
+
         user = User.query.filter_by(email=email, user_type=user_type).first()
-        
+
         if not user:
             print(f"User '{email}' not found in database. Denying.")
             return jsonify({'error': 'Invalid credentials - user not found'}), 401
@@ -50,7 +50,7 @@ def login():
         if not check_password_hash(user.hashed_password, password):
             print(f"Password for user '{email}' does not match. Denying.")
             return jsonify({'error': 'Invalid credentials - password mismatch'}), 401
-        
+
         print(f"Login successful for user '{email}'. Generating token.")
         token = create_access_token(identity={'id': user.id, 'user_type': user.user_type})
         response_data = {'token': token, 'user_type': user.user_type, 'name': user.name}

@@ -4,6 +4,25 @@ import { getToken } from '../utils/auth';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 
+function Badge({ children, color }) {
+  const colorMap = {
+    reviewed: 'bg-green-100 text-green-700',
+    pending: 'bg-yellow-100 text-yellow-700',
+    default: 'bg-gray-100 text-gray-700',
+  };
+  return (
+    <span className={`px-2 py-1 rounded text-xs font-semibold ${colorMap[color] || colorMap.default}`}>{children}</span>
+  );
+}
+
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center py-8">
+      <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -125,9 +144,9 @@ export default function AdminDashboard() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-blue-700">Admin Dashboard</h2>
+          <h2 className="text-3xl font-bold text-blue-700">Admin Dashboard</h2>
           <a href="/admin/deadline" className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition">Set Deadline</a>
         </div>
         {/* Filter Controls */}
@@ -137,11 +156,12 @@ export default function AdminDashboard() {
           <input type="date" value={filterEnd} onChange={e => setFilterEnd(e.target.value)} className="p-2 border rounded focus:ring-2 focus:ring-blue-200" />
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold transition">Filter</button>
         </form>
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-100">
-          {loading ? <div>Loading...</div> : (
+        <div className="bg-white p-6 rounded-2xl shadow-2xl border border-blue-100">
+          <h3 className="text-xl font-bold mb-4 text-blue-700">All Documents</h3>
+          {loading ? <Spinner /> : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-blue-50">
+              <table className="w-full text-sm text-left border-separate border-spacing-y-1">
+                <thead className="bg-blue-50 sticky top-0 z-10">
                   <tr>
                     <th className="p-2 font-semibold">User</th>
                     <th className="p-2 font-semibold">Title</th>
@@ -149,12 +169,13 @@ export default function AdminDashboard() {
                     <th className="p-2 font-semibold">Viewed</th>
                     <th className="p-2 font-semibold">Comment</th>
                     <th className="p-2 font-semibold">File</th>
+                    <th className="p-2 font-semibold">Status</th>
                     <th className="p-2 font-semibold">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {docs.map(doc => (
-                    <tr key={doc.id} className="border-b last:border-0 hover:bg-blue-50/50">
+                    <tr key={doc.id} className="border-b last:border-0 hover:bg-blue-50/50 transition">
                       <td className="p-2">{doc.user_name}</td>
                       <td className="p-2">{doc.title}</td>
                       <td className="p-2">{new Date(doc.upload_datetime).toLocaleString()}</td>
@@ -183,6 +204,9 @@ export default function AdminDashboard() {
                         >
                           View
                         </button>
+                      </td>
+                      <td className="p-2">
+                        {doc.is_viewed ? <Badge color="reviewed">Reviewed</Badge> : <Badge color="pending">Pending</Badge>}
                       </td>
                       <td className="p-2">
                         <button

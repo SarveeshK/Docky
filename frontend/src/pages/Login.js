@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { useLoading } from '../components/LoadingContext';
 
@@ -101,7 +101,7 @@ export default function Login() {
           <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold transition shadow-card">Login</button>
           {userType === 'user' && (
             <div className="mt-2 text-center">
-              <a href="/signup" className="text-blue-500 hover:underline">Sign up</a>
+              <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
             </div>
           )}
         </form>

@@ -1,54 +1,20 @@
 import React from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const userType = localStorage.getItem('user_type');
-  const name = localStorage.getItem('name');
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
-  };
-
-  // Hide Login/Sign Up links if already on those pages
-  const isLogin = location.pathname === '/';
-  const isSignup = location.pathname === '/signup';
-
   return (
-    <nav className="bg-white shadow sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl font-bold text-blue-600 tracking-tight">Docky</span>
-            {userType && (
-              <span className="ml-4 px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs font-semibold uppercase">
-                {userType} {name && <span className="capitalize">({name})</span>}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-4">
-            {userType === 'admin' && (
-              <>
-                <Link to="/admin" className="text-gray-700 hover:text-blue-600 font-medium">Dashboard</Link>
-                <Link to="/admin/deadline" className="text-gray-700 hover:text-blue-600 font-medium">Set Deadline</Link>
-              </>
-            )}
-            {userType === 'user' && (
-              <Link to="/user" className="text-gray-700 hover:text-blue-600 font-medium">Dashboard</Link>
-            )}
-            {userType && (
-              <button onClick={handleLogout} className="ml-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition">Logout</button>
-            )}
-            {!userType && !isLogin && !isSignup && (
-              <>
-                <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Login</Link>
-                <Link to="/signup" className="text-gray-700 hover:text-blue-600 font-medium">Sign Up</Link>
-                <button onClick={() => navigate('/', { state: { admin: true } })} className="text-gray-700 hover:text-blue-600 font-medium">Admin Login</button>
-              </>
-            )}
-          </div>
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur shadow-md border-b border-blue-100">
+      <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          {/* Placeholder logo: a blue document icon */}
+          <span className="inline-block w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-card">
+            <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><rect width="16" height="20" x="2" y="0" rx="3" fill="#2563eb"/><rect width="12" height="2" x="4" y="4" rx="1" fill="#fff"/><rect width="8" height="2" x="4" y="8" rx="1" fill="#fff"/><rect width="10" height="2" x="4" y="12" rx="1" fill="#fff"/></svg>
+          </span>
+          <span className="text-xl font-bold text-primary">Docky</span>
+        </Link>
+        <div className="flex items-center gap-6">
+          <Link to="/" className="text-blue-700 hover:text-primary font-medium transition">Home</Link>
+          <Link to="/user" className="text-blue-700 hover:text-primary font-medium transition">Dashboard</Link>
         </div>
       </div>
     </nav>

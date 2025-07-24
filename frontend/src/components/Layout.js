@@ -3,10 +3,14 @@ import Navbar from './Navbar';
 
 export default function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-sans">
       <Navbar />
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8">{children}</main>
-      <footer className="text-center text-gray-400 py-4 text-sm">© {new Date().getFullYear()} Docky. All rights reserved.</footer>
+      <main className="max-w-4xl mx-auto px-4 py-8 transition-opacity duration-500 animate-fadein">
+        {children}
+      </main>
+      <footer className="text-center text-gray-400 py-6 text-sm">
+        &copy; {new Date().getFullYear()} Docky. All rights reserved.
+      </footer>
     </div>
   );
 } 

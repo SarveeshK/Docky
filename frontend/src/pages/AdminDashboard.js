@@ -80,16 +80,9 @@ export default function AdminDashboard() {
   const [filterStatus, setFilterStatus] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(() => () => {});
-  const [recentActivity, setRecentActivity] = useState([]);
 
   useEffect(() => {
     fetchDocs();
-    // Simulate recent activity
-    setRecentActivity([
-      { type: 'upload', user: 'Alice', title: 'Report.pdf', time: '2m ago' },
-      { type: 'comment', user: 'Bob', title: 'Notes.txt', time: '5m ago' },
-      { type: 'download', user: 'Admin', title: 'Invoice.png', time: '10m ago' },
-    ]);
   }, []);
 
   const fetchDocs = async (filters = {}) => {
@@ -440,19 +433,6 @@ export default function AdminDashboard() {
           </div>
           <BackToTopButton />
         </div>
-        <aside className="bg-white rounded-xl shadow-card p-4 w-full md:w-64 h-fit sticky top-24">
-          <h4 className="text-lg font-bold mb-2 text-blue-700">Recent Activity</h4>
-          <ul className="space-y-2">
-            {recentActivity.map((a, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm">
-                {a.type === 'upload' && <FaFileUpload className="text-blue-500" />} 
-                {a.type === 'download' && <FaCloudDownloadAlt className="text-green-500" />} 
-                {a.type === 'comment' && <FaCommentDots className="text-yellow-500" />} 
-                <span className="font-semibold">{a.user}</span> {a.type} <span className="font-bold">{a.title}</span> <span className="text-gray-400 ml-auto">{a.time}</span>
-              </li>
-            ))}
-          </ul>
-        </aside>
       </div>
     </Layout>
   );

@@ -41,16 +41,10 @@ export default function UserDashboard() {
   const [filterStatus, setFilterStatus] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(() => () => {});
-  const [recentActivity, setRecentActivity] = useState([]);
 
   useEffect(() => {
     fetchDocs();
     fetchDeadline();
-    // Simulate recent activity
-    setRecentActivity([
-      { type: 'upload', title: 'MyPhoto.png', time: '1m ago' },
-      { type: 'download', title: 'Notes.txt', time: '7m ago' },
-    ]);
   }, []);
 
   const fetchDocs = async () => {
@@ -184,7 +178,8 @@ export default function UserDashboard() {
               className="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-blue-200 peer"
               required
             />
-            <label className={`absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 ${title ? '-top-2 text-xs text-blue-600' : ''}`}>Title</label>
+            <label className={`absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-all duration-200
+              ${title ? '-top-4 text-xs text-blue-600' : 'peer-focus:-top-4 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400'}`}>Title</label>
           </div>
           <div className="relative w-full">
             <FaCommentDots className={`absolute left-3 top-1/2 -translate-y-1/2 text-blue-400 ${inputFocus.description ? 'text-blue-600' : ''}`} />
@@ -290,19 +285,6 @@ export default function UserDashboard() {
             </div>
           )}
         </div>
-        {/* Recent Activity Feed */}
-        <aside className="bg-white rounded-xl shadow-card p-4 w-64 ml-6 h-fit sticky top-24">
-          <h4 className="text-lg font-bold mb-2 text-blue-700">Recent Activity</h4>
-          <ul className="space-y-2">
-            {recentActivity.map((a, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm">
-                {a.type === 'upload' && <FaFileUpload className="text-blue-500" />} 
-                {a.type === 'download' && <FaCloudDownloadAlt className="text-green-500" />} 
-                <span className="font-bold">{a.title}</span> <span className="text-gray-400 ml-auto">{a.time}</span>
-              </li>
-            ))}
-          </ul>
-        </aside>
       </div>
       {/* File Preview Modal */}
       {viewFile && (

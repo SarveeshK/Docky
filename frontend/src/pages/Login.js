@@ -72,7 +72,8 @@ export default function Login() {
               className="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-blue-200 peer"
               required
             />
-            <label className={`absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 ${email ? '-top-2 text-xs text-blue-600' : ''}`}>Email</label>
+            <label className={`absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-all duration-200
+              ${email ? '-top-4 text-xs text-blue-600' : 'peer-focus:-top-4 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400'}`}>Email</label>
           </div>
           <div className="relative w-full">
             <FaLock className={`absolute left-3 top-1/2 -translate-y-1/2 text-blue-400 ${inputFocus.password ? 'text-blue-600' : ''}`} />
@@ -86,7 +87,8 @@ export default function Login() {
               className="w-full p-2 pl-10 border rounded focus:ring-2 focus:ring-blue-200 pr-10 peer"
               required
             />
-            <label className={`absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 ${password ? '-top-2 text-xs text-blue-600' : ''}`}>Password</label>
+            <label className={`absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-all duration-200
+              ${password ? '-top-4 text-xs text-blue-600' : 'peer-focus:-top-4 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400'}`}>Password</label>
             <button
               type="button"
               className="absolute right-2 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 focus:outline-none"

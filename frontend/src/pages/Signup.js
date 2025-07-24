@@ -4,9 +4,11 @@ import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
 import { useLoading } from '../components/LoadingContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Signup() {
   const { setLoading } = useLoading();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ export default function Signup() {
       await axios.post('/api/auth/signup', { name, email, password, user_type: userType });
       setLoading(false);
       toast.success('Signup successful! You can login now.', { className: 'bg-green-50 text-green-800 font-semibold' });
-      setTimeout(() => window.location.href = '/', 1200);
+      setTimeout(() => navigate('/'), 1200);
     } catch (err) {
       setLoading(false);
       const errorMsg = err.response?.data?.error || 'Signup failed';
@@ -91,7 +93,7 @@ export default function Signup() {
           </div>
           <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold transition shadow-card">Sign Up</button>
           <div className="mt-2 text-center">
-            <a href="/" className="text-blue-500 hover:underline">Login</a>
+            <Link to="/" className="text-blue-500 hover:underline">Login</Link>
           </div>
         </form>
       </div>

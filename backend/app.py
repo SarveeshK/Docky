@@ -4,7 +4,6 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import os
 
-from flask import send_from_directory
 app = Flask(__name__)
 database_url = os.environ.get('DATABASE_URL')
 
@@ -14,10 +13,12 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///docky.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'super-secret-key'
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'uploads')
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'super-secret-key')
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', os.path.join(os.path.dirname(__file__), 'uploads'))
 
-CORS(app, origins=["https://your-frontend.onrender.com"])
+# Use environment variable for CORS origins for flexibility on Render
+CORS(app, origins=[os.environ.get('CORS_ORIGINS', 'http://localhost:3000')])
+
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
@@ -36,32 +37,6 @@ app.register_blueprint(settings_bp, url_prefix='/api/settings')
 # Create tables if not exist
 with app.app_context():
     db.create_all()
-
-
-
-# Serve favicon.ico from React build or public directory
-@app.route('/favicon.ico')
-def favicon():
-    # Try build directory first, fallback to public if needed
-    build_favicon = os.path.join(app.static_folder, 'favicon.ico')
-    public_favicon = os.path.join(os.path.dirname(app.static_folder), 'public', 'favicon.ico')
-    if os.path.exists(build_favicon):
-        return send_from_directory(app.static_folder, 'favicon.ico')
-    elif os.path.exists(public_favicon):
-        return send_from_directory(os.path.join(os.path.dirname(app.static_folder), 'public'), 'favicon.ico')
-    else:
-        # No favicon found
-        from flask import abort
-        return abort(404)
-
-# Serve React build files for non-API routes
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve_react_app(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

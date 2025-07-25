@@ -17,7 +17,7 @@ app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'super-secret-ke
 app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', os.path.join(os.path.dirname(__file__), 'uploads'))
 
 # Use environment variable for CORS origins for flexibility on Render
-CORS(app, origins=[os.environ.get('CORS_ORIGINS', 'http://localhost:3000')])
+CORS(app, origins=["https://docky-1.onrender.com"])
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
@@ -37,6 +37,23 @@ app.register_blueprint(settings_bp, url_prefix='/api/settings')
 # Create tables if not exist
 with app.app_context():
     db.create_all()
+
+# Temporary route to create admin user (REMOVE after use)
+@app.route('/create_admin')
+def create_admin():
+    from models import db, User
+    from werkzeug.security import generate_password_hash
+    if not User.query.filter_by(email="admin@docky.com").first():
+        admin = User(
+            name="Admin",
+            email="admin@docky.com",
+            hashed_password=generate_password_hash("admin123"),
+            user_type="admin"
+        )
+        db.session.add(admin)
+        db.session.commit()
+        return "Admin created!"
+    return "Admin already exists."
 
 if __name__ == '__main__':
     app.run(debug=True)
